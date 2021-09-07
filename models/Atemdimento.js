@@ -10,9 +10,6 @@ class Atendimento{
     const dataValida = moment(data).isSameOrAfter(dataCriacao);
     const clienteValido = atendimento.cliente.length >= 5;
     
-    
-  
-
     const validacoes = [
       
       {
@@ -41,10 +38,11 @@ class Atendimento{
       const sql = `INSERT INTO atendimentos SET ?`;
 
       conexao.query(sql, atendimentoDatado, (erro,resultados) =>{
+       const id = resultados.insertId
         if(erro){
           res.status(400).json(erro)
         }else{
-          res.status(201).json(resultados); 
+          res.status(201).json({...atendimento, id}); 
         }
       })
     }    
@@ -79,7 +77,31 @@ class Atendimento{
       }
     })
   }
+
+  altera(id, valores, res){
+    const sql = `UPDATE  atendimentos SET ? where id=?`;
+
+    conexao.query(sql,[valores,id],(erro, resultados) =>{
+     
+      if(erro){
+        res.status(400).json(erro)
+      }else{
+        res.status(200).json({...valores, id})
+      }
+    })
+  }
   
+  deleta(id, res){
+    const sql = `DELETE FROM atendimentos WHERE id=?`
+
+    conexao.query(sql, id,(erro, resultados) =>{
+      if(erro){
+        res.status(400).json(erro)
+      }else{
+        res.status(200).json({id})
+      }
+    })
+  }
 }
 
 module.exports = new Atendimento;

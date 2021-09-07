@@ -2,6 +2,7 @@
 const Atendimento = require('../models/Atemdimento')
 
 module.exports = app =>{
+
   app.get('/atendimentos', (req,res) => {
     console.log(Atendimento.pegarAtendimentos(res));});
 
@@ -16,4 +17,16 @@ module.exports = app =>{
   Atendimento.adiciona(atendimento,res);
    
     });
+
+  app.patch('/atendimentos/id=:id', (req, res) =>{
+    const id = parseInt(req.params.id);
+    const valores = req.body;
+
+    Atendimento.altera(id, valores, res);
+  })  
+
+  app.delete('/atendimentos/id=:id', (req, res) =>{
+    const id = parseInt(req.params.id);
+    Atendimento.deleta(id,res)
+  })
 }
